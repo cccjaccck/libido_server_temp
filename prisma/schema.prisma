@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["orderByRelation"]
+}
+
+model User {
+  id           String    @id @default(cuid())
+  password     String
+  email        String    @unique
+  username     String    @unique
+  following    User[]    @relation("FollowRelation", references: [id])
+  follower     User[]    @relation("FollowRelation", references: [id])
+  rooms        Room[]    @relation("JoinRelation")
+  videos       Video[]
+  messages     Message[]
+  avatar       String?
+  currentUsing Boolean   @default(false)
+  hosting      Room[]    @relation("hostingRelation")
+}
+
+model Video {
+  id        Int      @id @default(autoincrement())
+  url       String   @unique
+  title     String
+  thumbnail String
+  type      Type     @default(YOUTUBE)
+  rooms     Room[]
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  room      Room     @relation(fields: [roomId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  text      String
+  createdAt DateTime @default(now())
+  roomId    Int
+  userId    String
+}
+
+model Room {
+  id        Int       @id @default(autoincrement())
+  users     User[]    @relation("JoinRelation")
+  host      User      @relation("hostingRelation", fields: [hostId], references: [id])
+  messages  Message[]
+  url       String    @unique
+  title     String
+  password  String?
+  isLocked  Boolean   @default(false)
+  videos    Video[]
+  hostId    String
+  isLive    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
+
+enum Type {
+  YOUTUBE
+  NETFLIX
+}
