@@ -15,6 +15,7 @@ export default gql`
     messages: [Message!]
     watching: [User!]
     watchingCount: Int!
+    isMine: Boolean
   }
 
   input VideoInput {

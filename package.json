@@ -46,7 +46,8 @@
   },
   "scripts": {
     "migrate": "prisma migrate dev && npx prisma migrate deploy",
-    "dev": "nodemon --exec ts-node ./src/server.ts"
+    "dev": "nodemon --exec ts-node ./src/server.ts",
+    "start": "ts-node ./src/server.ts"
   },
   "resolutions": {
     "fs-capacitor": "^6.2.0",

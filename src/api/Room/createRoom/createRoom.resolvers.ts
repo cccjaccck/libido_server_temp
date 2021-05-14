@@ -51,7 +51,7 @@ export default {
               host: { connect: { id: loggedInUser.id } },
               users: { connect: { id: loggedInUser.id } },
               title,
-              url: process.env.DOMAIN + uri,
+              url: uri,
               isLocked: isLocked ?? false,
               password,
               videos: {

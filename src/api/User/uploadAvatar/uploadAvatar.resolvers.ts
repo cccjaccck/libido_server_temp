@@ -4,7 +4,7 @@ import { MutationResponse } from "../../shared/shared.typeDefs";
 import { protectedResolver } from "../users.utils";
 
 // const URL = "http://localhost:4000/static/";
-const URL = "http://192.168.123.105:4000/static/";
+// const URL = "http://192.168.123.105:4000/static/";
 
 export default {
   Mutation: {
@@ -21,7 +21,7 @@ export default {
             readStream.pipe(writeStream);
             await client.user.update({
               where: { id: loggedInUser.id },
-              data: { avatar: URL + newFilename },
+              data: { avatar: process.env.DOMAIN + "/static/" + newFilename },
             });
             return {
               ok: true,
