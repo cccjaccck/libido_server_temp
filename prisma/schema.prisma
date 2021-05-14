@@ -9,34 +9,40 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["orderByRelation"]
+  previewFeatures = ["orderByRelation", "selectRelationCount"]
 }
 
 model User {
-  id           String    @id @default(cuid())
-  password     String
-  email        String    @unique
-  username     String    @unique
-  following    User[]    @relation("FollowRelation", references: [id])
-  follower     User[]    @relation("FollowRelation", references: [id])
-  rooms        Room[]    @relation("JoinRelation")
-  videos       Video[]
-  messages     Message[]
-  avatar       String?
-  currentUsing Boolean   @default(false)
-  hosting      Room[]    @relation("hostingRelation")
+  id             String    @id @default(cuid())
+  password       String
+  email          String    @unique
+  username       String    @unique
+  following      User[]    @relation("FollowRelation", references: [id])
+  follower       User[]    @relation("FollowRelation", references: [id])
+  rooms          Room[]    @relation("JoinRelation")
+  videos         Video[]
+  messages       Message[]
+  avatar         String?
+  currentUsing   Boolean   @default(false)
+  hosting        Room[]    @relation("hostingRelation")
+  watching       Room?     @relation("WatchingRelation", fields: [watchingRoomId], references: [id])
+  watchingRoomId Int?
+  enterTime      DateTime?
 }
 
 model Video {
-  id        Int      @id @default(autoincrement())
-  url       String   @unique
-  title     String
-  thumbnail String
-  type      Type     @default(YOUTUBE)
-  rooms     Room[]
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  url          String
+  title        String
+  channelTitle String
+  thumbnail    String
+  type         Type     @default(YOUTUBE)
+  rooms        Room[]
+  User         User?    @relation(fields: [userId], references: [id])
+  userId       String?
+  createdAt    DateTime @default(now())
+
+  @@unique([url, userId])
 }
 
 model Message {
@@ -50,18 +56,22 @@ model Message {
 }
 
 model Room {
-  id        Int       @id @default(autoincrement())
-  users     User[]    @relation("JoinRelation")
-  host      User      @relation("hostingRelation", fields: [hostId], references: [id])
-  messages  Message[]
-  url       String    @unique
-  title     String
-  password  String?
-  isLocked  Boolean   @default(false)
-  videos    Video[]
-  hostId    String
-  isLive    Boolean   @default(false)
-  createdAt DateTime  @default(now())
+  id           Int       @id @default(autoincrement())
+  users        User[]    @relation("JoinRelation")
+  host         User      @relation("hostingRelation", fields: [hostId], references: [id])
+  hostId       String
+  messages     Message[]
+  url          String
+  title        String
+  password     String?
+  isLocked     Boolean   @default(false)
+  videos       Video[]
+  isLive       Boolean?
+  createdAt    DateTime  @default(now())
+  watching     User[]    @relation("WatchingRelation")
+  watchingTime Int       @default(0)
+
+  @@unique([hostId, isLive])
 }
 
 enum Type {

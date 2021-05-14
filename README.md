@@ -8,6 +8,9 @@
 - [x] getMyFriends
 - [x] searchUsers
 - [x] changePassword
+- [ ] requestChangePassword
+- [x] editUser
+- [x] uploadAvatar
 - [ ] getMySummary
 - [ ] changeProfile
 - [ ] totalViewTime - computed
@@ -21,11 +24,14 @@
 
 - [x] getMyRooms
 - [x] createRoom
-- [x] joinRoom
 - [x] getLives
 - [x] searchRooms
 - [x] startLive
 - [x] endLive
+- [x] seeViewers
+- [x] joinRoom
+- [x] exitRoom
+- [x] roomUpdates
 
 ### Video
 
@@ -34,5 +40,4 @@
 
 ### Message
 
-- [ ] sendMessage
-- [ ] 메세지 서브스크립션(채팅방)
+- [x] sendMessage

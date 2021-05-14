@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
-import { prisma } from "./server";
+import client from "./client";
 import {
   RequestWithUser,
   ResponseWithUser,
@@ -13,7 +13,7 @@ const jwtOption = {
 
 const verifyUser = async (payload, done) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: payload.id } });
+    const user = await client.user.findUnique({ where: { id: payload.id } });
     if (user !== null) {
       return done(null, user);
     } else {
